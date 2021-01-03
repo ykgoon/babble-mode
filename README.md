@@ -2,7 +2,7 @@
 
 ## Summary
 
-foobar
+The thing you do before pruning.
 
 ## Installing
 
