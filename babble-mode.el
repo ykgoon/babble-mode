@@ -41,9 +41,12 @@ Cancels itself, if this buffer was killed."
 
 (defun clear-and-center ()
   (erase-buffer)
-  (dotimes (number (/ (window-height) 2))
+  (dotimes (number (/ (frame-height) 2))
     (insert "\n"))
-  (end-of-buffer)
+
+  (goto-char (point-max))
+  (recenter-top-bottom)
+
   ;; (dotimes (number (/ (window-width) 2))
   ;;   (insert " "))
   )
