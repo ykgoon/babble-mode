@@ -1,8 +1,8 @@
-;;; babble-mode.el --- foobar
+;;; babble-mode.el ---
 
 ;; Copyright (C) 2021 YK Goon
 
-;; Author: YK Goon <ykgoon@grex-delta>
+;; Author: YK Goon <ykgoon@gmail.com>
 ;; Version: 0.1
 
 ;; This file is not part of GNU Emacs.
@@ -22,11 +22,17 @@
 
 ;;; Commentary:
 
-;; foobar
+;; babble-mode
 
 ;;; Code:
 
+(define-derived-mode babble-mode text-mode "Babble"
+  "The thing you do before pruning"
+  (spacemacs-centered-buffer-mode t)
 
+  (dotimes (number (/ (window-height) 2))
+    (insert "\n")
+    ))
 
 (provide 'babble-mode)
 
