@@ -27,19 +27,23 @@
 ;;; Code:
 
 (defvar seconds-left 12)
+(defvar timer-id nil)
 
-(defun countdown ()
+(defun babble-mode-run ()
   "Display timer."
   ;; (setq global-mode-string
-  ;;      (append global-mode-string
-  ;;              (number-to-string seconds-left)))
-  (run-with-idle-timer seconds-left 1 erase-buffer))
+  ;;      (append global-mode-string 'seconds-left))
+  (if (bound-and-true-p babble-mode)
+      (setq timer-id
+            (run-with-idle-timer seconds-left 1 'erase-buffer))
+    (cancel-timer timer-id))
 
 (define-minor-mode babble-mode
   "The thing you do before pruning."
-  nil
+  :init-value nil
+  :global nil
   :lighter " Babble"
-  :after-hook (countdown))
+  :after-hook (babble-mode-run))
 
 (provide 'babble-mode)
 
