@@ -39,12 +39,17 @@ Cancels itself, if this buffer was killed."
     (fset fns fn)
     fn))
 
+
+(defvar seconds-left 32)
+
 (defun countdown ()
-  "Show timer."
-  (message "foobar"))
+  "Display timer."
+  (setq global-mode-string
+        (append global-mode-string
+                (number-to-string seconds-left))))
 
 (define-minor-mode babble-mode
-  "The thing you do before pruning"
+  "The thing you do before pruning."
   nil
   :lighter " Babble"
   :after-hook (countdown))
