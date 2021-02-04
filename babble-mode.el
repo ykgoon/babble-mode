@@ -25,28 +25,15 @@
 ;; babble-mode
 
 ;;; Code:
-(defun run-with-local-idle-timer (secs repeat function &rest args)
-  "Like `run-with-idle-timer', but always runs in the `current-buffer'.
-Cancels itself, if this buffer was killed."
-  (let* (;; Chicken and egg problem.
-         (fns (make-symbol "local-idle-timer"))
-         (timer (apply 'run-with-idle-timer secs repeat fns args))
-         (fn `(lambda (&rest args)
-                (if (not (buffer-live-p ,(current-buffer)))
-                    (cancel-timer ,timer)
-                  (with-current-buffer ,(current-buffer)
-                    (apply (function ,function) args))))))
-    (fset fns fn)
-    fn))
 
-
-(defvar seconds-left 32)
+(defvar seconds-left 12)
 
 (defun countdown ()
   "Display timer."
-  (setq global-mode-string
-        (append global-mode-string
-                (number-to-string seconds-left))))
+  ;; (setq global-mode-string
+  ;;      (append global-mode-string
+  ;;              (number-to-string seconds-left)))
+  (run-with-idle-timer seconds-left 1 erase-buffer))
 
 (define-minor-mode babble-mode
   "The thing you do before pruning."
