@@ -39,22 +39,15 @@ Cancels itself, if this buffer was killed."
     (fset fns fn)
     fn))
 
-(defun clear-and-center ()
-  (erase-buffer)
-  (dotimes (number (/ (frame-height) 2))
-    (insert "\n"))
+(defun countdown ()
+  "Show timer."
+  (message "foobar"))
 
-  (goto-char (point-max))
-  (recenter-top-bottom)
-
-  ;; (dotimes (number (/ (window-width) 2))
-  ;;   (insert " "))
-  )
-
-(define-derived-mode babble-mode text-mode "Babble"
+(define-minor-mode babble-mode
   "The thing you do before pruning"
-  (clear-and-center)
-  (run-with-local-idle-timer 6 1 'clear-and-center))
+  nil
+  :lighter " Babble"
+  :after-hook (countdown))
 
 (provide 'babble-mode)
 
