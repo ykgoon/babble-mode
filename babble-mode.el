@@ -36,7 +36,7 @@
   (if (bound-and-true-p babble-mode)
       (setq timer-id
             (run-with-idle-timer seconds-left 1 'erase-buffer))
-    (cancel-timer timer-id))
+    (cancel-timer timer-id)))
 
 (define-minor-mode babble-mode
   "The thing you do before pruning."
