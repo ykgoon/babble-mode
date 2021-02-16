@@ -28,34 +28,41 @@
 
 (defvar seconds-left 16)
 (defvar timer-id nil)
+(defvar babble-buffer-name nil)
 
 (spaceline-define-segment babble-segment
   "Babble timer"
   (when (bound-and-true-p babble-mode)
     (progn
       (setq idle-time (current-idle-time))
-      (when idle-time
+      (if idle-time
         (concat (number-to-string
                  (- seconds-left
                     (first (decode-time idle-time))))
-                "s"))))
-  :when active
-  :priority 100)
+                "s")
+        (concat (number-to-string seconds-left) "s"))))
+  :when active)
 (add-to-list 'spacemacs-spaceline-additional-segments
              '(babble-segment))
 (spaceline-spacemacs-theme '(babble-segment))
 
+(defun babble-mode-punish ()
+  (set-buffer babble-buffer-name)
+  (erase-buffer))
+
 (defun babble-mode-run ()
   (if (bound-and-true-p babble-mode)
-      (setq timer-id
-            (run-with-idle-timer seconds-left 1 'erase-buffer))
+      (progn
+        (setq babble-buffer-name (current-buffer))
+        (setq timer-id
+              (run-with-idle-timer seconds-left 1 'babble-mode-punish)))
     (cancel-timer timer-id)))
 
 (define-minor-mode babble-mode
   "The thing you do before pruning."
   :init-value nil
   :global nil
-  :lighter " Babble"
+  :lighter " Babble "
   :after-hook (babble-mode-run))
 
 (provide 'babble-mode)
