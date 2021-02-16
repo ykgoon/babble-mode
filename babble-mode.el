@@ -26,19 +26,23 @@
 
 ;;; Code:
 
-(defvar seconds-left 8)
+(defvar seconds-left 16)
 (defvar timer-id nil)
 
 (spaceline-define-segment babble-segment
   "Babble timer"
-  (when (and (bound-and-true-p babble-mode)
-             (current-idle-time))
-      (message "%s" (decode-time (current-idle-time)))
-     ;; (number-to-string (- seconds-left (current-idle-time)))
-     )
-  :when active)
-(add-to-list
- 'spacemacs-spaceline-additional-segments '(babble-segment))
+  (when (bound-and-true-p babble-mode)
+    (progn
+      (setq idle-time (current-idle-time))
+      (when idle-time
+        (concat (number-to-string
+                 (- seconds-left
+                    (first (decode-time idle-time))))
+                "s"))))
+  :when active
+  :priority 100)
+(add-to-list 'spacemacs-spaceline-additional-segments
+             '(babble-segment))
 (spaceline-spacemacs-theme '(babble-segment))
 
 (defun babble-mode-run ()
