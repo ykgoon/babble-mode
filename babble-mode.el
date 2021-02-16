@@ -26,8 +26,9 @@
 
 ;;; Code:
 
-(defvar seconds-left 16)
-(defvar timer-id nil)
+(defvar time-limit 16)
+(defvar idle-timer-id nil)
+(defvar modeline-timer-id nil)
 (defvar babble-buffer-name nil)
 
 (spaceline-define-segment babble-segment
@@ -36,11 +37,15 @@
     (progn
       (setq idle-time (current-idle-time))
       (if idle-time
-        (concat (number-to-string
-                 (- seconds-left
-                    (first (decode-time idle-time))))
-                "s")
-        (concat (number-to-string seconds-left) "s"))))
+          (progn
+            (setq idled-for
+                  (first (decode-time idle-time)))
+            (setq seconds-left (- time-limit idled-for))
+            (if (> seconds-left 0)
+                (concat (number-to-string seconds-left)
+                        "s")
+              "0s"))
+        "babbling")))
   :when active)
 (add-to-list 'spacemacs-spaceline-additional-segments
              '(babble-segment))
@@ -54,9 +59,14 @@
   (if (bound-and-true-p babble-mode)
       (progn
         (setq babble-buffer-name (current-buffer))
-        (setq timer-id
-              (run-with-idle-timer seconds-left 1 'babble-mode-punish)))
-    (cancel-timer timer-id)))
+        (setq idle-timer-id
+              (run-with-idle-timer
+               time-limit 1 'babble-mode-punish))
+        (setq modeline-timer-id
+              (run-with-timer 1 1 'force-mode-line-update)))
+    (progn
+      (cancel-timer idle-timer-id)
+      (cancel-timer modeline-timer-id))))
 
 (define-minor-mode babble-mode
   "The thing you do before pruning."
