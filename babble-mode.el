@@ -1,8 +1,9 @@
-;;; babble-mode.el ---
+;;; babble-mode.el ---            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2021 YK Goon
+;; Copyright (C) 2021 Y.K. Goon
 
 ;; Author: YK Goon <ykgoon@gmail.com>
+;; Package-Requires: ((emacs "25.1"))
 ;; Version: 0.1
 
 ;; This file is not part of GNU Emacs.
